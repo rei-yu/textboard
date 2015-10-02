@@ -10,6 +10,13 @@ class BoardsController < ApplicationController
   # GET /boards/1
   # GET /boards/1.json
   def show
+    @comments = @board.comments
+    @comment = Comment.new
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @board }
+    end
   end
 
   # GET /boards/new

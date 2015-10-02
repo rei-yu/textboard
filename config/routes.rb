@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 
   resources :boards do
-    resources :comment
+    resources :comments
   end
 
   root to: "boards#index"
