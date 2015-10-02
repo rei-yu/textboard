@@ -12,6 +12,7 @@ class BoardsController < ApplicationController
   def show
     @board = Board.find(params[:id])
     @comments = @board.comments
+    @comment = Comment.new
 
     respond_to do |format|
       format.html # show.html.erb
