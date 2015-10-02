@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  devise_for :users
   resources :boards, shallow: true do
     resources :comments
   end
