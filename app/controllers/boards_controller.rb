@@ -1,5 +1,9 @@
 class BoardsController < ApplicationController
   before_action :set_board, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: [ :new, :edit, :create, :update, :destroy]
+  before_action :correct_user, only: [:edit, :update, :destroy]
+
+  attr_reader :user_id
 
   # GET /boards
   # GET /boards.json
@@ -33,6 +37,8 @@ class BoardsController < ApplicationController
   # POST /boards.json
   def create
     @board = Board.new(board_params)
+    @user = current_user
+    @board.user_id = @user.id
 
     respond_to do |format|
       if @board.save
@@ -79,4 +85,11 @@ class BoardsController < ApplicationController
     def board_params
       params.require(:board).permit(:title, :overview)
     end
+
+    def correct_user
+      user_id = Board.find(params[:id]).user_id
+      @user = User.find(user_id)
+      redirect_to(root_path) unless current_user == @user
+    end
+
 end

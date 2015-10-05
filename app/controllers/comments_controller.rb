@@ -1,5 +1,9 @@
 class CommentsController < ApplicationController
   before_action :set_comment, only: [:edit, :update, :destroy]
+  before_action :authenticate_user!, only: [ :new, :edit, :create, :update, :destroy]
+  before_action :correct_user, only: [:edit, :update, :destroy]
+
+  attr_reader :user_id
 
   # GET /comments
   # GET /comments.json
@@ -21,6 +25,8 @@ class CommentsController < ApplicationController
   def create
     @board = Board.find(params[:board_id])
     @comment = @board.comments.build(comment_params)
+    @user = current_user
+    @comment.user_id = @user.id
 
     respond_to do |format|
       if @comment.save
@@ -68,5 +74,11 @@ class CommentsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def comment_params
       params.require(:comment).permit(:text,:board_id,:user_id)
+    end
+
+    def correct_user
+      user_id = Comment.find(params[:id]).user_id
+      @user = User.find(user_id)
+      redirect_to(root_path) unless current_user == @user
     end
 end
