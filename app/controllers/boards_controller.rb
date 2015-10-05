@@ -3,6 +3,8 @@ class BoardsController < ApplicationController
   before_action :authenticate_user!, only: [ :new, :edit, :create, :update, :destroy]
   before_action :correct_user, only: [:edit, :update, :destroy]
 
+  attr_reader :user_id
+
   # GET /boards
   # GET /boards.json
   def index
